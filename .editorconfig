@@ -9,23 +9,20 @@ root = true
 
 [*]
 charset = utf-8
-indent_style = tab
+indent_style = space
+tab_width = 2
 end_of_line = lf
 insert_final_newline = true
 trim_trailing_whitespace = true
-tab_width = 4
 
-[*.{html,css}]
+[*.{html,css,pug}]
 tab_width = 2
 
 [*.{json,yml,code-snippets}]
 indent_style = space
 indent_size = 2
 
-[{.zshrc}]
+[*.{zshrc,bashrc}]
 indent_style = space
 indent_size = 2
 
-[{.bashrc}]
-indent_style = space
-indent_size = 2
