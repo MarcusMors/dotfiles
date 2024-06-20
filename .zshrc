@@ -142,6 +142,7 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+alias clip='xclip -selection clipboard'
 alias ubuntu_version="lsb_release -a"
 alias cb="xclip -sel clip"
 alias clipboard="xclip -sel clip"
@@ -310,6 +311,8 @@ fi
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
 eval "$(pyenv init --path)"
+#eval "$(pyenv init -)"
+#eval "$(pyenv virtualenv-init -)"
 # export PYTHONHOME=""
 export PYTHONHOME=/usr/bin/python
 # export PYTHONHOME=/usr/bin/python
@@ -326,4 +329,4 @@ export PYTHONHOME=/usr/bin/python
 export PATH="$HOME/.pyenv/plugins/pyenv-virtualenv/bin:$PATH"
 #eval "$(pyenv virtualenv-init -)"
 eval "$(zoxide init zsh)"
-
+export FCEDIT=vim
