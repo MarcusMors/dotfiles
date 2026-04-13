@@ -1,215 +1,264 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
+# =============================================================================
+# POWERLEVEL10K INSTANT PROMPT - MUST STAY AT TOP
+# =============================================================================
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
-# If you come from bash you might have to change your $PATH.
+# =============================================================================
+# OH MY ZSH CONFIGURATION
+# =============================================================================
+
+# Path to Oh My Zsh installation
+export ZSH="$HOME/.oh-my-zsh"
+
+# ZSH_THEME="random" # to load a random theme each time Zsh is loaded.
+# echo $RANDOM_THEME # to know which theme was loaded.
+# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+ZSH_THEME="powerlevel10k/powerlevel10k"
+
+# If set to an empty array, this variable will have no effect.
+# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" "..." )
+
+# Standard plugins can be found in $ZSH/plugins/
+# Custom plugins may be added to $ZSH_CUSTOM/plugins/
+plugins=(
+    git
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+    zsh-interactive-cd
+    catimg
+    extract
+    poetry
+    fzf
+    zsh-bat
+)
+
+# Source Oh My Zsh
+source $ZSH/oh-my-zsh.sh
+
+# =============================================================================
+# PATH CONFIGURATION
+# =============================================================================
+
+# Basic PATH setup
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
-# make c++ ASAN call stack and error message prettier
-export ASAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer
+# Local bin directory
+if [ -d "$HOME/.local/bin" ] ; then
+    PATH="$HOME/.local/bin:$PATH"
+fi
 
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
-
-# X11 perf display
-# export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
-
-# Path to your oh-my-zsh installation.
-export ZSH="/home/marcus/.oh-my-zsh"
-
-# go path
+# Go language paths
 export GOROOT=/usr/local/go
 export GOPATH=$HOME/go
 export PATH=$GOPATH/bin:$GOROOT/bin:$PATH
 
-
-# colored GCC warnings and errors
-# alias gmoji="gitmoji -c"
-# alias g++-11="gccfilter" #it makes the errors and warnings prettier, not sure whether use it or not.
-export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-export GXX_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
-
-export CC=gcc-13
-# export CXX=clang++
-export CXX=g++-13
-
-# FLUTTER
+# Flutter SDK
 export PATH="$PATH:/home/marcus/flutter/bin"
 
-# Set name of the theme to load --- if set to "random", it will
-# load a random theme each time oh-my-zsh is loaded, in which case,
-# to know which specific one was loaded, run: echo $RANDOM_THEME
-# See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
-ZSH_THEME="powerlevel10k/powerlevel10k"
+export CMAKE_PREFIX_PATH=~/libs/kfr-install/lib/cmake:$CMAKE_PREFIX_PATH
 
-# Set list of themes to pick from when loading at random
-# Setting this variable when ZSH_THEME=random will cause zsh to load
-# a theme from this variable instead of looking in $ZSH/themes/
-# If set to an empty array, this variable will have no effect.
-# ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+# =============================================================================
+# DEVELOPMENT TOOLS & ENVIRONMENT
+# =============================================================================
 
-# Uncomment the following line to use case-sensitive completion.
-# CASE_SENSITIVE="true"
+# C++ Development
+# make c++ ASAN call stack and error message prettier
+export ASAN_SYMBOLIZER_PATH=/usr/bin/llvm-symbolizer
+# colored GCC warnings and errors
+export GCC_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+export GXX_COLORS='error=01;31:warning=01;35:note=01;36:caret=01;32:locus=01:quote=01'
+# alias g++-11="gccfilter" #it makes the errors and warnings prettier, not sure whether use it or not.
 
-# Uncomment the following line to use hyphen-insensitive completion.
-# Case-sensitive completion must be off. _ and - will be interchangeable.
-# HYPHEN_INSENSITIVE="true"
+# Uncomment for specific compiler settings:
+# export CC=gcc-14
+# export CXX=g++-14
+# export CXX=clang++
+# export CFLAGS="-flto" #with g++ and gcc
+# export CFLAGS="-thin" #with clang and clang++
+# export LDFLAGS="-fuse-ld=lld -Wl,--threads=$(nproc)"
 
-# Uncomment the following line to disable bi-weekly auto-update checks.
-# DISABLE_AUTO_UPDATE="true"
+# Python Environment (Pyenv) # SAFE TO REMOVE
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv >/dev/null; then
+  eval "$(pyenv init --path)"
+  eval "$(pyenv init -)"
+fi
 
-# Uncomment the following line to automatically update without prompting.
-# DISABLE_UPDATE_PROMPT="true"
+# Node Version Manager (NVM)
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
-# Uncomment the following line to change how often to auto-update (in days).
-# export UPDATE_ZSH_DAYS=13
+# =============================================================================
+# TOOL INITIALIZATION
+# =============================================================================
 
-# Uncomment the following line if pasting URLs and other text is messed up.
-# DISABLE_MAGIC_FUNCTIONS="true"
+# Zoxide (cd++)
+eval "$(zoxide init zsh)"
+eval "$(zoxide init --cmd cd zsh)"
 
-# Uncomment the following line to disable colors in ls.
-# DISABLE_LS_COLORS="true"
 
-# Uncomment the following line to disable auto-setting terminal title.
-# DISABLE_AUTO_TITLE="true"
+# AUTO-DETECTION FOR PYTHON ENVIRONMENTS ======================================
 
-# Uncomment the following line to enable command auto-correction.
-# ENABLE_CORRECTION="true"
+# Add this section for automatic Python virtual environment detection
+autoload -U add-zsh-hook
+add-zsh-hook chpwd auto_python_venv
 
-# Uncomment the following line to display red dots whilst waiting for completion.
-# Caution: this setting can cause issues with multiline prompts (zsh 5.7.1 and newer seem to work)
-# See https://github.com/ohmyzsh/ohmyzsh/issues/5765
-# COMPLETION_WAITING_DOTS="true"
+auto_python_venv() {
+    # If we're in a conda environment, don't interfere
+    if [[ -n "$CONDA_DEFAULT_ENV" ]]; then
+        return
+    fi
+    
+    local current_env="$VIRTUAL_ENV"
+    local found_venv=""
+    
+    # Check for standard virtual environments (covers 90% of cases)
+    local venv_dirs=("venv" ".venv" "env" ".env")
+    for venv_dir in $venv_dirs; do
+        if [[ -d "$venv_dir" ]] && [[ -f "$venv_dir/bin/activate" ]]; then
+            found_venv="$venv_dir"
+            break
+        fi
+    done
+    
+    # Handle environment activation/deactivation
+    if [[ -n "$found_venv" ]]; then
+        if [[ -n "$current_env" ]]; then
+            # Switch environments if different
+            if [[ "$(basename "$current_env")" != "$found_venv" ]]; then
+                echo "🐍 Switching to Python env: $found_venv"
+                deactivate 2>/dev/null
+                source "$found_venv/bin/activate"
+            fi
+        else
+            # Activate new environment
+            echo "🐍 Activating Python env: $found_venv"
+            source "$found_venv/bin/activate"
+        fi
+    elif [[ -n "$current_env" ]]; then
+        # Only deactivate if we've clearly left the environment directory
+        local env_parent=$(dirname "$current_env")
+        if [[ "$PWD" != "$env_parent"* ]]; then
+            echo "🚪 Leaving Python env: $(basename "$current_env")"
+            deactivate
+        fi
+    fi
+    
+    # Optional: Notify about Python projects without active environments
+    if [[ -z "$VIRTUAL_ENV" ]] && [[ -f "pyproject.toml" || -f "requirements.txt" ]]; then
+        echo "📁 Python project detected (no active virtual environment)"
+    fi
+}
 
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-# DISABLE_UNTRACKED_FILES_DIRTY="true"
+# Run on shell startup to check initial directory
+auto_python_venv
 
-# Uncomment the following line if you want to change the command execution time
-# stamp shown in the history command output.
-# You can set one of the optional three formats:
-# "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
-# or set a custom format using the strftime function format specifications,
-# see 'man strftime' for details.
-# HIST_STAMPS="mm/dd/yyyy"
+# Conda (Python package management)
+# >>> conda initialize >>>
+# !! Contents within this block are managed by 'conda init' !!
+__conda_setup="$('/home/marcus/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+if [ $? -eq 0 ]; then
+    eval "$__conda_setup"
+else
+    if [ -f "/home/marcus/miniconda3/etc/profile.d/conda.sh" ]; then
+        . "/home/marcus/miniconda3/etc/profile.d/conda.sh"
+    else
+        export PATH="/home/marcus/miniconda3/bin:$PATH"
+    fi
+fi
+unset __conda_setup
+# <<< conda initialize <<<
 
-# Would you like to use another custom folder than $ZSH/custom?
-# ZSH_CUSTOM=/path/to/new-custom-folder
+# Direnv (directory-specific environment variables)
+eval "$(direnv hook zsh)"
 
-# Which plugins would you like to load?
-# Standard plugins can be found in $ZSH/plugins/
-# Custom plugins may be added to $ZSH_CUSTOM/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-# Add wisely, as too many plugins slow down shell startup.
+# =============================================================================
+# ALIASES - QUICK COMMANDS
+# =============================================================================
 
-plugins=(
-git
-zsh-autosuggestions
-zsh-syntax-highlighting
-zsh-interactive-cd
-catimg
-extract
-poetry
-)
-
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
-
-# export MANPATH="/usr/local/man:$MANPATH"
-
-# You may need to manually set your language environment
-# export LANG=en_US.UTF-8
-
-# Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
-
-# Compilation flags
-# export ARCHFLAGS="-arch x86_64"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-alias clip='xclip -selection clipboard'
-alias ubuntu_version="lsb_release -a"
-alias cb="xclip -sel clip"
-alias clipboard="xclip -sel clip"
+# Git aliases
+alias gs="git switch"
 alias gmoji="gitmoji -c"
+
+# System information
+alias ubuntu_version="lsb_release -a"
+
+# Clipboard utilities
+alias cb="xclip -sel clip"
+alias clip='xclip -selection clipboard'
+alias clipboard="xclip -sel clip"
+
+# File listing
 alias ls='colorls --group-directories-first'
+
+# Code editors
 alias c='code'
 alias vsc='code'
 alias vsca='code --add'
 alias vscd='code --diff'
+alias coded='code --diff'
+alias codea='code --add'
+
+# Development navigation
 alias gbin='cd ./bin || cd ../bin || cd build/bin || cd ../build/bin'
 alias gbuild='cd ./build || cd ../build || cd ../../build'
-# alias cmors='cmake -S . -B ./build && cmake --build && cd build && make'
-alias cmors='rm -rf build && cmake -S . -B ./build && cmake --build ./build && gbuild && make -j $(nproc)'
-alias cmors_debug='rm -rf build && cmake -S . -B ./build && cmake -DCMAKE_BUILD_TYPE=Debug ./build && gbuild && make -j $(nproc)'
-alias cmors_release='rm -rf build && cmake -S . -B ./build && cmake -DCMAKE_BUILD_TYPE=Release ./build && gbuild all && make -j $(nproc)'
 
+# Build systems
+alias cmors='m:clear && rm -rf build && cmake -S . -B ./build && cmake --build ./build && gbuild && make -j $(nproc)'
+alias cmors_debug='m:clear && rm -rf build && cmake -S . -B ./build && cmake -DCMAKE_BUILD_TYPE=Debug ./build && gbuild && make -j $(nproc)'
+alias cmors_release='m:clear && rm -rf build && cmake -S . -B ./build && cmake -DCMAKE_BUILD_TYPE=Release ./build && gbuild all && make -j $(nproc)'
+
+# =============================================================================
+# CUSTOM FUNCTIONS
+# =============================================================================
+
+# Database utilities
 function mysql() {
-
-    # if the `mysql` argument is not set
-    if [ -z "${1+xxx}" ]; then # mysql to the default server
+    if [ -z "${1+xxx}" ]; then
         command mysql
-        # MYVARIABLE="$(path/myExcecutable-bin 2>&1 > /dev/null)" #to save stderr message
         if [ $? -ne 0 ]; then
           echo ""
-          echo "you might need to turn on the server by running the following commands:
-  sudo service mysql start #or
-  sudo /etc/init.d/mysql start"
+          echo "you might need to turn on the server by running:"
+          echo "  sudo service mysql start"
+          echo "  sudo /etc/init.d/mysql start"
         fi
-    fi
-
-    # if the `mysql` argument is set
-    if [ -z "$1" ] && [ "${1+xxx}" = "xxx" ]; then # mysql using a different server
+    else
         command mysql $1
     fi
 }
 
 function psql() {
-
-    # if the `psql` argument is not set
-    if [ -z "${1+xxx}" ]; then # psql to the default server
+    if [ -z "${1+xxx}" ]; then
         command psql
-        # MYVARIABLE="$(path/myExcecutable-bin 2>&1 > /dev/null)" #to save stderr message
         if [ $? -ne 0 ]; then
           echo ""
-          echo "you might need to turn on the server by running the following commands:
-  sudo service postgresql-9.3 initdb #Initialize the server
-  sudo /etc/init.d/postgresql start #Start the server"
+          echo "you might need to turn on the server by running:"
+          echo "  sudo service postgresql-9.3 initdb"
+          echo "  sudo /etc/init.d/postgresql start"
         fi
-    fi
-
-    # if the `psql` argument is set
-    if [ -z "$1" ] && [ "${1+xxx}" = "xxx" ]; then # psql using a different server
+    else
         command psql $1
     fi
 }
 
+# Screen management
 m:clear(){
-  default=20
-  for i in `seq 1 ${1:-${default}}` do
+  default=${LINES:-20}
+  for i in $(seq 1 ${1:-${default}}); do
     echo ""
+  done
 }
 
+# Git workflow
 m:git_flow_init(){
   declare -a arr=($1 $2 ${3:-"h"} ${4:-"r"} ${5:-"d"})
   git init
   echo "repository initialized"
-  for i in "${arr[@]}" do
+  for i in "${arr[@]}"; do
     case ${i} in
     m)  git branch marcus ;;
     f)  echo "Feature branch name: "
@@ -220,18 +269,14 @@ m:git_flow_init(){
     d)  git branch develop ;;
     ?) echo "Not recognizable gitflow branch";;
     esac
+  done
 }
 
-
+# C++ project initialization
 m:c++_init(){
-#   declare -a arr=($1 $2 $3)
-#   CURRENTDATE=`date +”%A, %b %d, %Y %H:%M:%S”"`
   mkdir src/ build/ libs/ include/ tests/
-  # mkdir ./src/headers/
   touch ./src/main.cpp ./cmakeLists.txt .gitignore README.md
-  #date
-  #date +”%A, %b %d, %Y %H:%M:%S”
-  #sed
+  
   echo "¿What license you want for your project?
   [GPLv3][none]
   default: GPLv3
@@ -242,6 +287,7 @@ m:c++_init(){
     cp ~/.aliases-src/licenses/$license.txt .
     mv ./$license.txt ./COPYING
   fi
+  
   echo "build/*" >> .gitignore
   echo "## Project File Structure
 
@@ -272,61 +318,53 @@ m:c++_init(){
     |
     |---- tests/
 ## Compile the project
-\`\`\`bash I'm A tab
+\`\`\`bash
     take build/
     cmake ..
     make --build .
 \`\`\`" >> README.md
 }
 
+# =============================================================================
+# APPEARANCE & THEMING
+# =============================================================================
 
-# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
+# Batcat theme for syntax highlighting
+#export BAT_THEME="Coldark-Dark"
+#export BAT_THEME="Visual Studio Dark+"
+export BAT_THEME="gruvbox-dark"
+#export BAT_THEME="zenburn"
+
+# Powerlevel10k configuration
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+# To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 
+# =============================================================================
+# SECURITY & SSH
+# =============================================================================
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/home/marcus/anaconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "/home/marcus/anaconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/marcus/anaconda3/etc/profile.d/conda.sh"
-    else
-        export PATH="/home/marcus/anaconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
-
-if [ -d "$HOME/.local/bin" ] ; then
-    PATH="$HOME/.local/bin:$PATH"
+# SSH cache agent setup (so that i use my password 1 time per session)
+if [ -z "$SSH_AUTH_SOCK" ]; then
+  eval "$(ssh-agent -s)" > /dev/null
+  ssh-add ~/.ssh/id_rsa 2>/dev/null
 fi
 
-#export PATH="$PATH"
-# if [ -d "$HOME/+projects/exe_scripts/benchplot/dist" ] ; then
-#     PATH="$HOME/+projects/exe_scripts/benchplot/dist:$PATH"
-# fi
+# Default editor
+export FCEDIT=vim
 
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
-eval "$(pyenv init --path)"
-#eval "$(pyenv init -)"
-#eval "$(pyenv virtualenv-init -)"
-# export PYTHONHOME=""
-export PYTHONHOME=/usr/bin/python
-# export PYTHONHOME=/usr/bin/python
-# export PYTHONPATH=/usr/bin/python3
-# alias python="python3"
+
+
+# =============================================================================
+# LEGACY/COMMENTED CONFIGURATION
+# =============================================================================
+
+# X11 display (commented out)
+# export DISPLAY=$(awk '/nameserver / {print $2; exit}' /etc/resolv.conf 2>/dev/null):0
+
+# Homebrew (commented out - potential Python conflicts)
 # eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 
-# [[ -d $PYENV_ROOT/bin ]] && export PATH="$PYENV_ROOT/bin:$PATH"
-# eval "$(pyenv init -)"
-
-# eval "$(pyenv init --path)"
-# eval "$(pyenv pyenv virtualenv-init -)"
-
-export PATH="$HOME/.pyenv/plugins/pyenv-virtualenv/bin:$PATH"
-#eval "$(pyenv virtualenv-init -)"
-eval "$(zoxide init zsh)"
-export FCEDIT=vim
+# Alternative bat themes (commented out)
+# export BAT_THEME="Coldark-Dark"
+# export BAT_THEME="Visual Studio Dark+"
+# export BAT_THEME="zenburn"
